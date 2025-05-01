@@ -24,7 +24,7 @@ const HeroSection: React.FC = () => {
               Powered by UpRock DePIN Network
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6">
-              <span className="block">Optimize Your Content with</span>
+              <span className="block text-4xl">Optimize Your Content with</span>
               <span className="bg-gradient-to-r from-violet-500 to-cyan-400 bg-clip-text text-transparent">
                 Decentralized Feedback
               </span>
