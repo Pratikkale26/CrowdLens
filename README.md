@@ -24,8 +24,8 @@ This ensures that when you’re choosing the best thumbnail, title, or design, y
 
 ---
 
-## 🖼️ Demo Screens (Coming soon)
-<!-- Insert GIFs or images when ready -->
+## 🖼️ Preview
+![CrowdLens Preview](/apps/frontend/public/preview.png)
 
 ---
 
