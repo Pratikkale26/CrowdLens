@@ -1,88 +1,92 @@
 # 🧠 CrowdLens
 
-**CrowdLens** is a community-driven voting platform empowering content creators to make data-backed decisions-such as choosing the best YouTube thumbnail, caption, or design-by letting real users vote on the most impactful option.  
-Built on **UpRock’s decentralized DePIN network** for authentic, real-world feedback, and powered by **Solana** for seamless, decentralized payments and wallet integration.
+**CrowdLens** is a decentralized feedback engine where creators and AI teams get real human validation on content — through tokenized micro-tasks powered by the Solana ecosystem.
+
+Built with ❤️ for the new wave of **AI x Web3 x DePIN** tools.
 
 ---
 
-## 🚀 Features
+## 🌟 Project Motive
 
-- ✨ Creators can upload multiple content options (thumbnails, images, titles)
-- 🗳️ Community voters (via UpRock) pick the most effective version, ensuring real human input
-- 🔒 One vote per user
-- 💸 **Solana payments:** Creators pay for campaigns directly from their Solana wallet
-- 🪙 Integrated Solana wallet adapters for secure, fast transactions
-- 📊 Real-time results & transparent voting breakdown (on-chain verification)
+Today’s creators and AI developers are bottlenecked by one thing: **subjective decision-making**.
 
----
+- “Which thumbnail works best?”
+- “Which image looks fake or real?”
+- “Which dataset sample is higher quality?”
 
-## 🤖 Why UpRock?
+These decisions require human judgment — not just analytics. Yet no scalable, incentive-aligned solution exists.
 
-CrowdLens leverages **UpRock’s mobile-first DePIN network** to source genuine, diverse human feedback at scale.  
-UpRock contributors-real people running the UpRock app-participate in voting rounds, providing unbiased, high-quality data for creators.  
-This ensures that when you’re choosing the best thumbnail, title, or design, you’re getting honest opinions from a global pool of real users, not bots or click farms[1].
+**CrowdLens** fixes this by turning content feedback into a micro-task network powered by real validators and on-chain incentives.
 
 ---
 
-## 🖼️ Preview
-![CrowdLens Preview](/apps/frontend/public/preview.png)
+## 🚀 Key Features
+
+- **🖼 Upload Content Sets**  
+  Creators or teams upload sets of visual content (e.g. 4-5 thumbnails, 5 captions)
+
+- **👥 Validators Vote in Micro-batches**  
+  Global users vote on best options, helping surface insights
+
+- **💰 Tokenized Rewards**  
+  Validators are paid in Solana tokens per completed batch
+
+- **📊 Transparent Analytics**  
+  Track voting data, completion rates, validator contributions
+
+- **🔗 DePIN-style Validator Layer**  
+  Powered by real humans validating real-world content
+
+- **🧠 (Optional) AI Feedback Engine**  
+  Summarizes human votes & offers suggestions to creators
 
 ---
 
-## 🧱 Tech Stack
+## 🛠️ Tech Stack
 
-| Layer        | Tools                                                |
-|--------------|-----------------------------------------------------|
-| Frontend     | Next.js, TypeScript, TailwindCSS                    |
-| Backend API  | Node.js, Express, Prisma ORM                        |
-| Database     | PostgreSQL                                          |
-| Auth         | Clerk / JWT                                         |
-| Blockchain   | **Solana** (payments, wallet adapters, voting)      |
-| DePIN Layer  | **UpRock** (real human voting, data sourcing)       |
+- **Frontend**: Next.js + TypeScript + TailwindCSS  
+- **Backend**: Node.js, Express, Prisma  
+- **Database**: PostgreSQL
+- **Web3**: Solana Wallet Adapter, Phantom Integration  
+- **Auth**: Wallet-based login
+- **Infra**: Vercel + Render/AWS for scalable APIs  
 
 ---
 
-## ⚡ Solana Integration
+## 🧪 Live Demo
 
-- **Payments:**  
-  Creators launch campaigns and pay fees directly from their Solana wallet, enabling fast, low-cost, and transparent transactions.
-- **Wallet Adapters:**  
-  Supports Solana wallet adapters (Phantom, etc.) for seamless user onboarding and authentication.
-- **On-Chain Voting (Coming Soon):**  
-  Plans to record votes and reward distributions on Solana, ensuring transparency and verifiability.
+🌐 **Website**: https://crowdlens.kalehub.com/  
+📽️ Demo Video: [Will be linked here]  
+🧾 Grant Proposal: [Solana x Finternet → Submitted via Superteam]
 
 ---
 
-## 🤝 Partners
+## 📈 Roadmap & Goals
 
-- **UpRock:** Integrating DePIN infrastructure for decentralized, real-human feedback and data rewards.
-
----
-
-## 📈 Roadmap
-
-- [x] MVP: Off-chain voting and results
-- [x] Solana wallet integration for payments
-- [x] UpRock DePIN-powered human voting
-- [ ] On-chain voting and reward distribution
-- [ ] Public analytics dashboard
-- [ ] Creator/voter reputation system
+- ✅ MVP web app (creator upload + validator interface)  
+- ✅ Voting backend, wallet auth, payout infra  
+- 🚀 Launch pilot with 3–5 creators or open content demo set  
+- 🔄 Tokenized feedback dataset  
+- 🧠 (Optional) AI suggestion engine based on human votes  
 
 ---
 
-## 📝 Get Started
+## 📊 Success Metrics (KPIs)
 
-1. Connect your Solana wallet
-2. Create or join a campaign
-3. Vote and earn rewards (coming soon, via UpRock and Solana)
-
----
-
-## 🌍 Learn More
-
-- [Landing Page](https://crowdlens.kalehub.com)
-- [GitHub Issues](https://github.com/pratikkale26/crowdlens/issues)
+- `10,000+` human votes  
+- `500+` unique validators  
+- `3–5` creator pilot runs in first launch month  
+- < `5 min` avg turnaround time per vote batch
 
 ---
 
-**CrowdLens** - where creators and communities shape content, transparently and on-chain, with real human feedback from UpRock’s DePIN network and seamless payments via Solana.
+## 🙌 Why It Matters
+
+As AI-generated and human-created content flood the internet, **authentic human feedback** is becoming more valuable than ever. CrowdLens bridges the gap between content creation and real audience insight — rewarding users for their opinions and helping creators make better decisions.
+
+Whether you're an AI builder, YouTuber, or data scientist — if your content needs human judgment, **CrowdLens is your decentralized feedback engine.**
+
+---
+
+Ready to bring human intelligence back into the loop?  
+**Join us, vote with your wallet, and shape the content of tomorrow.**

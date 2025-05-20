@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Button from '../components/Button';
-import { ChevronRight, Youtube, Trophy, BarChart } from 'lucide-react';
+import { ChevronRight, Youtube, Trophy, BarChart, Code } from 'lucide-react';
 
 const HeroSection: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -21,7 +21,7 @@ const HeroSection: React.FC = () => {
           <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div className="inline-flex items-center py-1 px-3 mb-6 bg-violet-900/30 border border-violet-700/50 rounded-full text-violet-400 text-sm font-medium">
               <span className="flex h-2 w-2 rounded-full bg-violet-400 mr-2"></span>
-              Powered by UpRock DePIN Network x Solana
+              Powered by Solana x DePIN Network
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6">
               <span className="block text-4xl">Optimize Your Content with</span>
@@ -30,7 +30,7 @@ const HeroSection: React.FC = () => {
               </span>
             </h1>
             <p className="text-slate-300 text-lg md:text-xl mb-8 max-w-xl">
-              Get real-world feedback on your thumbnails and posters from actual viewers. Make data-driven decisions to increase your click-through rates.
+              CrowdLens helps creators and AI teams validate content with real human votes - from thumbnails to training data. Boost engagement with insights that actually matter.
             </p>
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-8">
               <Button size="lg">
@@ -45,6 +45,10 @@ const HeroSection: React.FC = () => {
               <span className="flex items-center mr-6">
                 <Youtube className="h-4 w-4 mr-1 text-red-500" />
                 For YouTubers
+              </span>
+              <span className="flex items-center mr-6">
+                <Code className="h-4 w-4 mr-1 text-red-500" />
+                For AI Builders
               </span>
               <span className="flex items-center mr-6">
                 <Trophy className="h-4 w-4 mr-1 text-amber-500" />
