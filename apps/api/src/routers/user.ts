@@ -1,8 +1,36 @@
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { prismaClient } from "db/client";
 import { Router } from "express";
 import jwt from "jsonwebtoken";
+import { authMiddleware } from "../middleware";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const router = Router();
+
+const s3Client = new S3Client({
+    credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!
+    },
+    region: process.env.AWS_REGION!
+});
+
+router.get("/presigned-url", authMiddleware, async (req, res) => {
+    //@ts-ignore
+    const userId = req.userId;
+
+    const command = new PutObjectCommand({
+        Bucket: process.env.S3_BUCKET_NAME,
+        Key: `user/${userId}/${Date.now()}/image.png`,
+        ContentType: "image/png"
+    })
+
+    const presignedUrl = await getSignedUrl(s3Client, command, {
+        expiresIn: 3600
+    })
+
+    res.json({ presignedUrl });
+})
 
 // signin with wallet address
 router.post("/signin", async (req, res) => {
