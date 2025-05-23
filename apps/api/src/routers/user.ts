@@ -1,9 +1,9 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
 import { prismaClient } from "db/client";
 import { Router } from "express";
 import jwt from "jsonwebtoken";
 import { authMiddleware } from "../middleware";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const router = Router();
 
@@ -19,17 +19,19 @@ router.get("/presigned-url", authMiddleware, async (req, res) => {
     //@ts-ignore
     const userId = req.userId;
 
-    const command = new PutObjectCommand({
-        Bucket: process.env.S3_BUCKET_NAME,
-        Key: `user/${userId}/${Date.now()}/image.png`,
-        ContentType: "image/png"
+    const { url, fields } = await createPresignedPost(s3Client, {
+        Bucket: process.env.S3_BUCKET_NAME!,
+        Key: `user/${userId}/${Math.random()}/image.jpg`,
+        Conditions: [
+          ['content-length-range', 0, 5 * 1024 * 1024] // 5 MB max
+        ],
+        Expires: 3600
     })
 
-    const presignedUrl = await getSignedUrl(s3Client, command, {
-        expiresIn: 3600
+    res.json({
+        preSignedUrl: url,
+        fields
     })
-
-    res.json({ presignedUrl });
 })
 
 // signin with wallet address
