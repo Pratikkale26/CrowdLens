@@ -14,7 +14,7 @@ app.use(cors({
 app.get("/", (req, res) => {
     res.send("API server running on http://localhost:8080");
 });
-
+ 
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/worker", workerRouter);
 

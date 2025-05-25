@@ -16,8 +16,62 @@ const s3Client = new S3Client({
     region: process.env.AWS_REGION!
 });
 
+router.get("/task", authMiddleware, async (req, res) => {
+    const taskId = req.query.taskId;
+    const userId = req.userId;
+
+    const taskDetails = await prismaClient.task.findFirst({
+        where: {
+            user_id: Number(userId),
+            id: Number(taskId)
+        },
+        include: {
+            options: true
+        }
+    })
+
+    if(!taskDetails) {
+        res.status(411).json({
+            msg: "you don't have access to this task"
+        })
+        return
+    }
+
+    const responses = await prismaClient.submission.findMany({
+        where:{
+            task_id:Number(taskId)
+        },
+        include: {
+            option: true
+        }
+    })
+
+    const result: Record<string, {
+        count: number,
+        option: {
+            imageUrl: string
+        }
+    }> = {};
+
+    taskDetails.options.forEach(option => {
+        result[option.id] = {
+            count: 0,
+            option: {
+                imageUrl: option.image_url
+            }
+        }
+    })
+
+    responses.forEach(r => {
+        result[r.option_id].count++;
+    })
+
+    res.json({
+        result
+    })
+})
+
 router.post("/task", authMiddleware, async (req, res) => {
-    //@ts-ignore
     const userId = req.userId;
     // validate inputs
     const body = req.body;
@@ -36,7 +90,7 @@ router.post("/task", authMiddleware, async (req, res) => {
         const task = await tx.task.create({
             data: {
                 title: parsedBody.data.title,
-                user_id: userId,
+                user_id: Number(userId),
                 signature: parsedBody.data.signature,
                 amount: 100,
             }
@@ -57,7 +111,6 @@ router.post("/task", authMiddleware, async (req, res) => {
 
 
 router.get("/presigned-url", authMiddleware, async (req, res) => {
-    //@ts-ignore
     const userId = req.userId;
 
     const { url, fields } = await createPresignedPost(s3Client, {
