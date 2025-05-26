@@ -20,6 +20,7 @@
     "@aws-sdk/s3-request-presigner": "^3.816.0",
     "@types/cors": "^2.8.18",
     "@types/jsonwebtoken": "^9.0.9",
+    "bs58": "^6.0.0",
     "cors": "^2.8.5",
     "db": "*",
     "express": "^5.1.0",

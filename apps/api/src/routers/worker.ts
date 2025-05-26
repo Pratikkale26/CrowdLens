@@ -115,5 +115,20 @@ router.post("/submission", workerAuthMiddleware, async (req, res) => {
 
 })
 
+router.get("/balance", workerAuthMiddleware, async (req, res) => {
+    const userId = req.userId;
+
+    const worker = await prismaClient.worker.findFirst({
+        where:{
+            id: Number(userId)
+        }
+    })
+
+    res.json({
+        pendingBal: worker?.pending_amount,
+        lockedBal: worker?.locked_amount
+    })
+})
+
 
 export default router;
