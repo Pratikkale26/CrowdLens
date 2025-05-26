@@ -1,6 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { WORKER_JWT_SECRET } from "./routers/worker";
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers["authorization"];
@@ -41,7 +40,7 @@ export const workerAuthMiddleware = (req: Request, res: Response, next: NextFunc
     const token = authHeader.split(" ")[1];
 
     try {
-        const decoded = jwt.verify(token, WORKER_JWT_SECRET);
+        const decoded = jwt.verify(token, process.env.WORKER_JWT_SECRET!);
         //@ts-ignore
         if(decoded.id) {
             //@ts-ignore

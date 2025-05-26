@@ -1,7 +1,8 @@
 import { prismaClient } from "db/client";
 import { Router } from "express";
 import jwt from "jsonwebtoken";
-export const WORKER_JWT_SECRET = process.env.JWT_SECRET + "worker";
+import { workerAuthMiddleware } from "../middleware";
+import { getNextTask } from "../db";
 
 const router = Router();
 
@@ -18,7 +19,7 @@ router.post("/signin", async (req, res) => {
         const token = jwt.sign({
             address: hardcoded_address,
             id: user?.id
-        }, WORKER_JWT_SECRET);
+        }, process.env.WORKER_JWT_SECRET!);
 
         res.json({ token });
     } else {
@@ -33,10 +34,26 @@ router.post("/signin", async (req, res) => {
         const token = jwt.sign({
             address: hardcoded_address,
             id: newUser?.id
-        }, WORKER_JWT_SECRET);
+        }, process.env.WORKER_JWT_SECRET!);
 
         res.json({ token });
     }
 });
+
+router.get("/nextTask", workerAuthMiddleware, async (req, res) => {
+    const userId = req.userId;
+
+    const task = await getNextTask(Number(userId));
+
+    if (!task) {
+        res.status(411).json({   
+            message: "No more tasks left for you to review"
+        })
+    } else {
+        res.json({   
+            task
+        })
+    }
+})
 
 export default router;
