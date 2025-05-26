@@ -5,6 +5,7 @@ import { Router } from "express";
 import jwt from "jsonwebtoken";
 import { authMiddleware } from "../middleware";
 import { createTaskSchema } from "../types";
+import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 
 const router = Router();
 
@@ -92,7 +93,7 @@ router.post("/task", authMiddleware, async (req, res) => {
                 title: parsedBody.data.title,
                 user_id: Number(userId),
                 signature: parsedBody.data.signature,
-                amount: 100,
+                amount: 0.1 * LAMPORTS_PER_SOL,
             }
         })
 
