@@ -3,11 +3,17 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, BarChart3 } from 'lucide-react';
 import Button from './Button';
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/clerk-react";
+import {
+  WalletDisconnectButton,
+  WalletMultiButton
+} from "@solana/wallet-adapter-react-ui";
+import { useWallet } from "@solana/wallet-adapter-react";
+import "@solana/wallet-adapter-react-ui/styles.css";
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { publicKey } = useWallet();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -63,17 +69,9 @@ const Navbar: React.FC = () => {
           {/* CTA Buttons */}
 
           <div className="hidden md:flex items-center space-x-4">
-            <SignedOut>
-              <div className="rounded-xl bg-gradient-to-tr from-purple-500 via-pink-500 to-orange-400 text-white px-5 py-2 text-sm font-medium shadow-md hover:scale-105 hover:shadow-lg transition-all duration-200">
-                <SignInButton />
+              <div className="rounded-xl px-5 py-2 text-sm font-medium text-neutral-800 dark:text-neutral-200">
+                {publicKey  ? <WalletDisconnectButton /> : <WalletMultiButton />}              
               </div>
-              <div className="rounded-xl border border-neutral-400 dark:border-neutral-600 px-5 py-2 text-sm font-medium text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-200">
-                <SignUpButton />
-              </div>
-            </SignedOut>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
           </div>
 
           {/* Mobile Menu Button */}

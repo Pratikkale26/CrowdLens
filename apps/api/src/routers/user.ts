@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import { authMiddleware } from "../middleware";
 import { createTaskSchema } from "../types";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { v4 as uuidv4 } from "uuid";
 
 const router = Router();
 
@@ -14,7 +15,8 @@ const s3Client = new S3Client({
         accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!
     },
-    region: process.env.AWS_REGION!
+    region: "blr1",
+    endpoint: "https://blr1.digitaloceanspaces.com",
 });
 
 router.get("/task", authMiddleware, async (req, res) => {
@@ -112,22 +114,31 @@ router.post("/task", authMiddleware, async (req, res) => {
 
 
 router.get("/presigned-url", authMiddleware, async (req, res) => {
-    const userId = req.userId;
-
-    const { url, fields } = await createPresignedPost(s3Client, {
+    try {
+      const userId = req.userId;
+      const key = `user/${userId}/${uuidv4()}/image.jpg`;
+  
+      const { url, fields } = await createPresignedPost(s3Client, {
         Bucket: process.env.S3_BUCKET_NAME!,
-        Key: `user/${userId}/${Math.random()}/image.jpg`,
+        Key: key,
         Conditions: [
-          ['content-length-range', 0, 5 * 1024 * 1024] // 5 MB max
+          ['content-length-range', 0, 5 * 1024 * 1024], // Max 5MB
+          ['starts-with', '$key', `user/${userId}/`],
+          { acl: 'public-read' }, // Ensure object is publicly accessible
         ],
-        Expires: 3600
-    })
-
-    res.json({
-        preSignedUrl: url,
-        fields
-    })
-})
+        Fields: {
+          acl: 'public-read', // Required to actually set it
+        },
+        Expires: 3600,
+      });
+  
+      res.json({ preSignedUrl: url, fields });
+    } catch (err) {
+      console.error("Presigned URL generation error:", err);
+      res.status(500).json({ error: "Failed to generate presigned URL" });
+    }
+  });
+  
 
 // signin with wallet address
 router.post("/signin", async (req, res) => {
