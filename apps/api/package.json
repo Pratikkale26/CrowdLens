@@ -25,6 +25,7 @@
     "db": "*",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "tweetnacl": "^1.0.3",
     "zod": "^3.25.23"
   }
 }

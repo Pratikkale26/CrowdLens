@@ -9,11 +9,12 @@ import {
 } from "@solana/wallet-adapter-react-ui";
 import { useWallet } from "@solana/wallet-adapter-react";
 import "@solana/wallet-adapter-react-ui/styles.css";
+import axios from 'axios';
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { publicKey } = useWallet();
+  const { publicKey, signMessage } = useWallet();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,6 +28,28 @@ const Navbar: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    const handleSignMessageAndSend = async () => {
+      const message = new TextEncoder().encode("Sign in into Crowdlens");
+      const signature = await signMessage?.(message);
+      if (!signature || !publicKey) return;
+
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/user/signin`, {
+        signature,
+        publicKey: publicKey.toBase58(),
+      });
+
+      if (res.status === 200) {
+        localStorage.setItem('token', res.data.token);
+      }
+    };
+
+    if (publicKey) {
+      handleSignMessageAndSend();
+    }
+  }, [publicKey])
+
 
   return (
     <header 

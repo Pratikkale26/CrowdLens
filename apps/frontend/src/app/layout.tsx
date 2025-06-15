@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "CrowdLens",
-  description: "CrowdLens - where creators and communities shape content, transparently and on-chain, with real human feedback from UpRock’s DePIN network and seamless payments via Solana.",
+  description: "CrowdLens - where creators and communities shape content, transparently and on-chain, with real human feedback from DePIN network and seamless payments via Solana.",
 };
 
 export default function RootLayout({
