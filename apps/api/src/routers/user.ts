@@ -5,11 +5,14 @@ import { Router } from "express";
 import jwt from "jsonwebtoken";
 import { authMiddleware } from "../middleware";
 import { createTaskSchema } from "../types";
-import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
+import { Connection, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 import { v4 as uuidv4 } from "uuid";
 import nacl from "tweetnacl";
+import { PARENT_WALLET_ADDRESS } from "../../utils/solana";
 
 const router = Router();
+
+const connection = new Connection(process.env.RPC_URL!);
 
 const s3Client = new S3Client({
     credentials: {
@@ -71,12 +74,21 @@ router.get("/task", authMiddleware, async (req, res) => {
     })
 
     res.json({
-        result
+        result,
+        taskDetails: {
+            title: taskDetails.title
+        }
     })
 })
 
 router.post("/task", authMiddleware, async (req, res) => {
     const userId = req.userId;
+    const user = await prismaClient.user.findUnique({
+        where: {
+            id: Number(userId)
+        }
+    })
+    
     // validate inputs
     const body = req.body;
 
@@ -89,6 +101,30 @@ router.post("/task", authMiddleware, async (req, res) => {
         })
         return;
     }
+
+    const transaction = await connection.getTransaction(parsedBody.data.signature, {
+        maxSupportedTransactionVersion: 1,
+        commitment: "confirmed"
+      });
+    
+      // check if the transaction is valid
+      if ((transaction?.meta?.postBalances[1] ?? 0) -
+          (transaction?.meta?.preBalances[1] ?? 0) !== 100000000 ) {
+        res.status(411).json({ message: "Incorrect transaction amount" });
+        return;
+      }
+    
+      // check if the transaction is sent to the correct address
+      if (transaction?.transaction.message.getAccountKeys().get(1)?.toString() !== PARENT_WALLET_ADDRESS ) {
+        res.status(411).json({ message: "Sent to wrong address" });
+        return;
+      }
+    
+      // check if the transaction is sent from the correct address
+      if (transaction?.transaction.message.getAccountKeys().get(0)?.toString() !== user?.address ) {
+        res.status(411).json({ message: "Sent from wrong address"});
+        return;
+      }
 
     const taskResult = await prismaClient.$transaction(async (tx) => {
         const task = await tx.task.create({

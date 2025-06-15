@@ -24,21 +24,27 @@ export const Upload = () => {
       toast.loading("Submitting task...");
       const response = await axios.post(
         `${NEXT_PUBLIC_BACKEND_URL}/api/v1/user/task`,
-        {
+        JSON.stringify({
           options: images.map((image) => ({ imageUrl: image })),
           title,
           signature: txSignature,
-        },
+        }),
         {
           headers: {
-            Authorization: localStorage.getItem("token"),
+            "Authorization": `${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+            "Content-Length": JSON.stringify({
+              options: images.map((image) => ({ imageUrl: image })),
+              title,
+              signature: txSignature,
+            }).length.toString()
           },
         }
       );
 
       toast.dismiss();
       toast.success("Task created!");
-      router.push(`/task/${response.data.id}`);
+      router.push(`/dashboard/task/${response.data.id}`);
     } catch (err) {
       toast.dismiss();
       toast.error("Failed to submit task.");

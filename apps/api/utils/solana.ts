@@ -1,0 +1,1 @@
+export const PARENT_WALLET_ADDRESS = "5tm9oN2bpTxFdELx9ddcxjFG9HD4NQHdkdz3CYm25EQj"

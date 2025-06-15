@@ -21,14 +21,14 @@ export const Appbar = () => {
       (async () => {
         try {
           setLoading(true);
-          const message = new TextEncoder().encode("Sign into CrowdLens");
+          const message = new TextEncoder().encode("Sign in into Crowdlens");
           const signature = await signMessage?.(message);
 
           if (!signature) throw new Error("Signature failed");
 
-          const response = await axios.post(`${BACKEND_URL}/v1/user/signin`, {
+          const response = await axios.post(`${BACKEND_URL}/api/v1/user/signin`, {
             signature,
-            publicKey: publicKey.toString()
+            publicKey: publicKey.toBase58()
           });
 
           localStorage.setItem("token", `Bearer ${response.data.token}`);
