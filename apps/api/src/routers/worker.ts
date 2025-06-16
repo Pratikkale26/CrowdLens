@@ -11,6 +11,15 @@ const router = Router();
 
 const TOTAL_SUBMISSIONS = 100;
 
+interface PrismaTransaction {
+    submission: {
+        create: (data: any) => Promise<any>;
+    };
+    worker: {
+        update: (data: any) => Promise<any>;
+    };
+}
+
 router.post("/signin", async (req, res) => {
     const { signature, publicKey } = req.body;
     const message = new TextEncoder().encode("Sign in into Crowdlens");
@@ -89,7 +98,7 @@ router.post("/submission", workerAuthMiddleware, async (req, res) => {
 
         const amount = (Number(task.amount) / TOTAL_SUBMISSIONS).toString();
 
-        const submission = await prismaClient.$transaction(async tx => {
+        const submission = await prismaClient.$transaction(async (tx: PrismaTransaction) => {
             const submission = await tx.submission.create({
                 data: {
                     option_id: Number(parsedBody.data.selection),

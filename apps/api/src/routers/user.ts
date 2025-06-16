@@ -23,6 +23,31 @@ const s3Client = new S3Client({
     endpoint: "https://blr1.digitaloceanspaces.com",
 });
 
+interface Option {
+    id: number;
+    image_url: string;
+    task_id: number;
+}
+
+interface Response {
+    option_id: number;
+    option: Option;
+}
+
+interface Transaction {
+    meta?: {
+        postBalances: number[];
+        preBalances: number[];
+    };
+    transaction: {
+        message: {
+            getAccountKeys: () => {
+                get: (index: number) => PublicKey | undefined;
+            };
+        };
+    };
+}
+
 router.get("/task", authMiddleware, async (req, res) => {
     const taskId = req.query.taskId;
     const userId = req.userId;
@@ -60,7 +85,7 @@ router.get("/task", authMiddleware, async (req, res) => {
         }
     }> = {};
 
-    taskDetails.options.forEach(option => {
+    taskDetails.options.forEach((option: Option) => {
         result[option.id] = {
             count: 0,
             option: {
@@ -69,7 +94,7 @@ router.get("/task", authMiddleware, async (req, res) => {
         }
     })
 
-    responses.forEach(r => {
+    responses.forEach((r: Response) => {
         result[r.option_id].count++;
     })
 
@@ -105,28 +130,28 @@ router.post("/task", authMiddleware, async (req, res) => {
     const transaction = await connection.getTransaction(parsedBody.data.signature, {
         maxSupportedTransactionVersion: 1,
         commitment: "confirmed"
-      });
+    }) as Transaction | null;
     
-      // check if the transaction is valid
-      if ((transaction?.meta?.postBalances[1] ?? 0) -
-          (transaction?.meta?.preBalances[1] ?? 0) !== 100000000 ) {
-        res.status(411).json({ message: "Incorrect transaction amount" });
-        return;
-      }
-    
-      // check if the transaction is sent to the correct address
-      if (transaction?.transaction.message.getAccountKeys().get(1)?.toString() !== PARENT_WALLET_ADDRESS ) {
-        res.status(411).json({ message: "Sent to wrong address" });
-        return;
-      }
-    
-      // check if the transaction is sent from the correct address
-      if (transaction?.transaction.message.getAccountKeys().get(0)?.toString() !== user?.address ) {
-        res.status(411).json({ message: "Sent from wrong address"});
-        return;
-      }
+    // check if the transaction is valid
+    if ((transaction?.meta?.postBalances[1] ?? 0) -
+        (transaction?.meta?.preBalances[1] ?? 0) !== 100000000 ) {
+      res.status(411).json({ message: "Incorrect transaction amount" });
+      return;
+    }
+  
+    // check if the transaction is sent to the correct address
+    if (transaction?.transaction.message.getAccountKeys().get(1)?.toString() !== PARENT_WALLET_ADDRESS ) {
+      res.status(411).json({ message: "Sent to wrong address" });
+      return;
+    }
+  
+    // check if the transaction is sent from the correct address
+    if (transaction?.transaction.message.getAccountKeys().get(0)?.toString() !== user?.address ) {
+      res.status(411).json({ message: "Sent from wrong address"});
+      return;
+    }
 
-    const taskResult = await prismaClient.$transaction(async (tx) => {
+    const taskResult = await prismaClient.$transaction(async (tx: any) => {
         const task = await tx.task.create({
             data: {
                 title: parsedBody.data.title,
