@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Button from '../components/Button';
 import { ChevronRight, Youtube, Trophy, BarChart, Code } from 'lucide-react';
+import Image from 'next/image';
 
 const HeroSection: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -70,10 +71,12 @@ const HeroSection: React.FC = () => {
                   <div className="absolute inset-0 bg-gradient-to-r from-violet-600 to-cyan-500 opacity-0 group-hover:opacity-70 transition-opacity duration-300 rounded-lg flex items-center justify-center">
                     <div className="text-white font-bold opacity-0 group-hover:opacity-100 transition-opacity">72% Vote</div>
                   </div>
-                  <img 
+                  <Image
                     src="https://images.pexels.com/photos/2263436/pexels-photo-2263436.jpeg" 
                     alt="Thumbnail example" 
                     className="rounded-lg w-full h-40 object-cover shadow-lg" 
+                    width={400}
+                    height={160}
                   />
                 </div>
                 
@@ -82,10 +85,12 @@ const HeroSection: React.FC = () => {
                   <div className="absolute inset-0 bg-gradient-to-r from-violet-600 to-cyan-500 opacity-0 group-hover:opacity-70 transition-opacity duration-300 rounded-lg flex items-center justify-center">
                     <div className="text-white font-bold opacity-0 group-hover:opacity-100 transition-opacity">28% Vote</div>
                   </div>
-                  <img 
+                  <Image
                     src="https://images.pexels.com/photos/5409751/pexels-photo-5409751.jpeg" 
                     alt="Thumbnail example" 
                     className="rounded-lg w-full h-40 object-cover shadow-lg" 
+                    width={400}
+                    height={160}
                   />
                 </div>
                 

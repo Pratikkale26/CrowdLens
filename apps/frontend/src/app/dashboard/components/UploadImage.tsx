@@ -1,7 +1,8 @@
 "use client";
 
 import axios from "axios";
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
+import Image from "next/image";
 
 const NEXT_PUBLIC_BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 const NEXT_PUBLIC_CLOUDFRONT_URL = process.env.NEXT_PUBLIC_CLOUDFRONT_URL;
@@ -9,10 +10,11 @@ const NEXT_PUBLIC_CLOUDFRONT_URL = process.env.NEXT_PUBLIC_CLOUDFRONT_URL;
 export function UploadImage({ onImageAdded, image }: { onImageAdded: (image: string) => void; image?: string }) {
   const [uploading, setUploading] = useState(false);
 
-  async function onFileSelect(e: any) {
+  async function onFileSelect(e: ChangeEvent<HTMLInputElement>) {
     setUploading(true);
     try {
-      const file = e.target.files[0];
+      const file = e.target.files?.[0];
+      if (!file) return;
 
       // Get presigned POST data from backend
       const response = await axios.get(`${NEXT_PUBLIC_BACKEND_URL}/api/v1/user/presigned-url`, {
@@ -51,7 +53,16 @@ export function UploadImage({ onImageAdded, image }: { onImageAdded: (image: str
   }
 
   if (image) {
-    return <img className="p-2 w-96 rounded" src={image} alt="uploaded" />;
+    return (
+      <div className="relative w-96 h-48">
+        <Image 
+          src={image} 
+          alt="uploaded" 
+          fill
+          className="p-2 rounded object-cover"
+        />
+      </div>
+    );
   }
 
   return (

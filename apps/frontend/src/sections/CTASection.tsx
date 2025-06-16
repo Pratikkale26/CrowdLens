@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '../components/Button';
 import { ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 
 const CTASection: React.FC = () => {
   return (
@@ -34,10 +35,12 @@ const CTASection: React.FC = () => {
 
           <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 md:p-8 max-w-3xl mx-auto border border-slate-700">
             <div className="flex items-center justify-center space-x-4 mb-4">
-              <img 
+              <Image
                 src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=100" 
                 alt="Testimonial" 
                 className="w-12 h-12 rounded-full object-cover border-2 border-violet-500" 
+                width={400}
+                height={160}
               />
               <div className="text-left">
                 <p className="text-white font-medium">Sophia Chen</p>

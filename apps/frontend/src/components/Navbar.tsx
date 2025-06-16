@@ -48,7 +48,7 @@ const Navbar: React.FC = () => {
     if (publicKey) {
       handleSignMessageAndSend();
     }
-  }, [publicKey])
+  }, [publicKey, signMessage])
 
 
   return (

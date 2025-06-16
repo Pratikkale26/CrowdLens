@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import toast from "react-hot-toast";
 import axios from "axios";
+import Image from "next/image";
 
 const NEXT_PUBLIC_BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -121,7 +122,16 @@ export const Upload = () => {
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {images.map((image, index) => (
               <div key={index} className="relative group rounded-lg overflow-hidden shadow-md">
-                <img src={image} alt="Uploaded" className="w-full h-32 object-cover" />
+                <Image 
+                  src={image} 
+                  alt="Uploaded" 
+                  unoptimized
+                  width={0}
+                  height={0}
+                  sizes="100vw"
+                  className="w-full h-auto object-contain"
+                  style={{ width: '100%', height: 'auto' }}
+                />
               </div>
             ))}
             <UploadImage
