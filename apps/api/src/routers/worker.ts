@@ -4,23 +4,37 @@ import jwt from "jsonwebtoken";
 import { workerAuthMiddleware } from "../middleware";
 import { getNextTask } from "../db";
 import { createSubmissionInput } from "../types";
+import nacl from "tweetnacl";
+import { PublicKey } from "@solana/web3.js";
 
 const router = Router();
 
 const TOTAL_SUBMISSIONS = 100;
 
 router.post("/signin", async (req, res) => {
-    const hardcoded_address = "GHA6AVEZAXqW1Sq5u2ymSJsjUzbBFp7R2hRbtHJBr1kP";
+    const { signature, publicKey } = req.body;
+    const message = new TextEncoder().encode("Sign in into Crowdlens");
+
+    const result = nacl.sign.detached.verify(
+        message,
+        new Uint8Array(signature.data),
+        new PublicKey(publicKey).toBytes()
+    );
+
+    if(!result) {
+        res.status(401).json({ error: "Invalid signature" });
+        return;
+    }
 
     const user = await prismaClient.worker.findUnique({
         where: {
-            address: hardcoded_address
+            address: publicKey
         }
     });
 
     if(user) {
         const token = jwt.sign({
-            address: hardcoded_address,
+            address: publicKey,
             id: user?.id
         }, process.env.WORKER_JWT_SECRET!);
 
@@ -28,14 +42,14 @@ router.post("/signin", async (req, res) => {
     } else {
         const newUser = await prismaClient.worker.create({
             data: {
-                address: hardcoded_address,
+                address: publicKey,
                 pending_amount: 0,
                 locked_amount: 0
             }
         });
 
         const token = jwt.sign({
-            address: hardcoded_address,
+            address: publicKey,
             id: newUser?.id
         }, process.env.WORKER_JWT_SECRET!);
 
