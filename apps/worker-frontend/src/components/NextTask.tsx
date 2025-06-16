@@ -35,7 +35,7 @@ export const NextTask = () => {
             setError(null);
             const token = localStorage.getItem("token");
             if (!token) {
-                throw new Error("Authentication token not found");
+                throw new Error("Authentication token not found, connect wallet and sign in");
             }
 
             const response = await axios.get<ApiResponse<Task>>(`${NEXT_PUBLIC_BACKEND_URL}/api/v1/worker/nextTask`, {
@@ -66,7 +66,7 @@ export const NextTask = () => {
             setError(null);
             const token = localStorage.getItem("token");
             if (!token) {
-                throw new Error("Authentication token not found");
+                throw new Error("Authentication token not found, connect wallet and sign in");
             }
 
             const response = await axios.post<ApiResponse<Task>>(
