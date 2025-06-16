@@ -4,9 +4,12 @@ import React, { useEffect, useState } from 'react';
 import Button from '../components/Button';
 import { ChevronRight, Youtube, Trophy, BarChart, Code } from 'lucide-react';
 import Image from 'next/image';
+import { useRouter } from "next/navigation";
+import toast from 'react-hot-toast';
 
 const HeroSection: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -14,6 +17,24 @@ const HeroSection: React.FC = () => {
     }, 100);
     return () => clearTimeout(timer);
   }, []);
+
+  const handleGetStarted = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      router.push("/dashboard");
+    } else {
+      toast.error("Please connect wallet/sign in to continue", {
+        duration: 3000,
+        position: "top-center",
+        style: {
+          background: "#ef4444",
+          color: "#fff",
+          padding: "16px",
+          borderRadius: "8px",
+        },
+      });
+    }
+  };
 
   return (
     <section className="pt-32 pb-16 md:pt-36 md:pb-24 overflow-hidden">
@@ -34,7 +55,7 @@ const HeroSection: React.FC = () => {
               CrowdLens helps creators and AI teams validate content with real human votes - from thumbnails to training data. Boost engagement with insights that actually matter.
             </p>
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-8">
-              <Button size="lg">
+              <Button size="lg" onClick={handleGetStarted}>
                 Get Started Free
               </Button>
               <Button variant="outline" size="lg" className="group flex items-center">
